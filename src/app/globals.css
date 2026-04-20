@@ -335,6 +335,491 @@ textarea {
   transform: translateX(110%);
 }
 
+.void-stream {
+  position: absolute;
+  top: -8%;
+  bottom: -8%;
+  z-index: 1;
+  width: clamp(110px, 11vw, 170px);
+  overflow: hidden;
+  mask-image: linear-gradient(180deg, transparent, black 10%, black 90%, transparent);
+  pointer-events: none;
+}
+
+.void-stream-right {
+  text-align: right;
+}
+
+.void-stream-track {
+  display: grid;
+  gap: 0.85rem;
+  width: 100%;
+  animation: codefall 18s linear infinite;
+}
+
+.void-stream-track.is-reverse {
+  animation-direction: reverse;
+}
+
+.void-stream-line {
+  margin: 0;
+  color: rgba(183, 255, 237, 0.4);
+  font-family: "SFMono-Regular", "IBM Plex Mono", "Menlo", monospace;
+  font-size: clamp(10px, 0.82vw, 12px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-shadow: 0 0 14px rgba(0, 255, 168, 0.18);
+  white-space: nowrap;
+}
+
+.keyword-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+  pointer-events: none;
+}
+
+.keyword-marquee.is-reverse .keyword-marquee-track {
+  animation-direction: reverse;
+}
+
+.keyword-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 1.1rem;
+  animation: marquee 26s linear infinite;
+}
+
+.keyword-token {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: max-content;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01)),
+    rgba(4, 8, 14, 0.6);
+  padding: 0.42rem 0.9rem;
+  color: rgba(217, 246, 255, 0.72);
+  font-size: clamp(11px, 0.92vw, 13px);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  backdrop-filter: blur(14px);
+}
+
+.orbit-label {
+  pointer-events: none;
+}
+
+.orbit-label span {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.02),
+    0 0 22px rgba(0, 0, 0, 0.28);
+  font-size: clamp(10px, 0.85vw, 12px);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
+}
+
+.gravity-well {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.98) 26%, rgba(8, 8, 8, 0.72) 42%, rgba(0, 0, 0, 0) 72%);
+  filter: blur(22px);
+  opacity: 0.96;
+  animation: well-breathe 7.4s ease-in-out infinite;
+}
+
+.vortex-ooze {
+  border-radius: 43% 57% 61% 39% / 42% 41% 59% 58%;
+  background:
+    radial-gradient(circle at 66% 62%, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.9) 28%, rgba(8, 8, 8, 0.54) 44%, rgba(255, 255, 255, 0.012) 58%, rgba(0, 0, 0, 0) 74%);
+  filter: blur(24px);
+  opacity: 0.94;
+  animation: void-morph 9.4s ease-in-out infinite;
+}
+
+.vortex-ooze.is-secondary {
+  border-radius: 58% 42% 37% 63% / 52% 62% 38% 48%;
+  filter: blur(28px);
+  opacity: 0.82;
+  animation-duration: 7.2s;
+  animation-direction: reverse;
+}
+
+.vortex-arm {
+  --arm-from-angle: -26deg;
+  --arm-mid-angle: 154deg;
+  --arm-from-x: 1.18;
+  --arm-mid-x: 1.34;
+  --arm-from-y: 0.8;
+  --arm-mid-y: 0.58;
+  border-radius: 48% 52% 58% 42% / 42% 44% 56% 58%;
+  background:
+    conic-gradient(
+      from 228deg,
+      rgba(255, 255, 255, 0) 0deg,
+      rgba(255, 255, 255, 0) 58deg,
+      rgba(255, 255, 255, 0.08) 92deg,
+      rgba(255, 255, 255, 0.02) 132deg,
+      rgba(255, 255, 255, 0) 176deg,
+      rgba(255, 255, 255, 0) 360deg
+    );
+  filter: blur(18px);
+  mask-image: radial-gradient(circle at 56% 50%, transparent 0 18%, black 28%, black 58%, transparent 72%);
+  opacity: 0.56;
+  animation: spiral-sweep 4.6s linear infinite;
+}
+
+.vortex-arm.is-secondary {
+  --arm-from-angle: 68deg;
+  --arm-mid-angle: -122deg;
+  --arm-from-x: 1.28;
+  --arm-mid-x: 1.42;
+  --arm-from-y: 0.72;
+  --arm-mid-y: 0.5;
+  opacity: 0.42;
+  filter: blur(24px);
+  animation-duration: 6.2s;
+  animation-direction: reverse;
+}
+
+.vortex-arm.is-tertiary {
+  --arm-from-angle: 148deg;
+  --arm-mid-angle: 322deg;
+  --arm-from-x: 1.36;
+  --arm-mid-x: 1.5;
+  --arm-from-y: 0.66;
+  --arm-mid-y: 0.44;
+  opacity: 0.3;
+  filter: blur(30px);
+  animation-duration: 7.4s;
+}
+
+.event-horizon {
+  overflow: hidden;
+  border-radius: 41% 59% 53% 47% / 48% 41% 59% 52%;
+  background:
+    radial-gradient(circle at 46% 44%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 16%, rgba(5, 5, 5, 0.98) 30%, rgba(12, 12, 12, 0.88) 46%, rgba(255, 255, 255, 0.012) 60%, rgba(0, 0, 0, 0) 80%),
+    conic-gradient(
+      from 216deg,
+      rgba(255, 255, 255, 0) 0deg,
+      rgba(255, 255, 255, 0) 62deg,
+      rgba(255, 255, 255, 0.045) 106deg,
+      rgba(255, 255, 255, 0.012) 148deg,
+      rgba(255, 255, 255, 0) 198deg,
+      rgba(255, 255, 255, 0) 360deg
+    );
+  box-shadow:
+    inset 0 0 140px rgba(0, 0, 0, 0.98),
+    inset 12px -8px 28px rgba(255, 255, 255, 0.012);
+  filter: contrast(132%);
+  animation:
+    horizon-spin 7.2s linear infinite,
+    void-morph 11s ease-in-out infinite;
+}
+
+.event-horizon::before {
+  position: absolute;
+  inset: 2%;
+  border-radius: 38% 62% 47% 53% / 55% 38% 62% 45%;
+  background:
+    radial-gradient(circle at 52% 56%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 42%, rgba(0, 0, 0, 0) 76%),
+    radial-gradient(circle at 40% 32%, rgba(255, 255, 255, 0.1), transparent 10%),
+    radial-gradient(circle at 62% 58%, rgba(255, 255, 255, 0.05), transparent 9%);
+  box-shadow:
+    inset 0 0 64px rgba(0, 0, 0, 1),
+    inset -14px 18px 36px rgba(255, 255, 255, 0.02),
+    0 0 36px rgba(0, 0, 0, 0.9);
+  filter: blur(4px);
+  animation: void-morph 8.8s ease-in-out infinite reverse;
+  content: "";
+}
+
+.event-horizon::after {
+  position: absolute;
+  inset: -10%;
+  border-radius: 57% 43% 59% 41% / 39% 61% 39% 61%;
+  background:
+    radial-gradient(circle at 48% 48%, rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, 0.032) 50%, rgba(255, 255, 255, 0.01) 60%, rgba(255, 255, 255, 0) 74%),
+    conic-gradient(
+      from 132deg,
+      rgba(255, 255, 255, 0) 0deg,
+      rgba(255, 255, 255, 0) 72deg,
+      rgba(255, 255, 255, 0.065) 118deg,
+      rgba(255, 255, 255, 0.014) 164deg,
+      rgba(255, 255, 255, 0) 228deg,
+      rgba(255, 255, 255, 0) 360deg
+    );
+  filter: blur(30px);
+  opacity: 0.5;
+  animation:
+    horizon-spin 5.4s linear infinite reverse,
+    void-morph 10.6s ease-in-out infinite;
+  content: "";
+}
+
+.vortex-shear {
+  border-radius: 46% 54% 60% 40% / 34% 62% 38% 66%;
+  background:
+    conic-gradient(
+      from 210deg,
+      rgba(255, 255, 255, 0) 0deg,
+      rgba(255, 255, 255, 0) 78deg,
+      rgba(255, 255, 255, 0.045) 126deg,
+      rgba(255, 255, 255, 0.014) 168deg,
+      rgba(255, 255, 255, 0) 232deg,
+      rgba(255, 255, 255, 0) 360deg
+    ),
+    radial-gradient(circle at 60% 44%, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.6) 26%, rgba(0, 0, 0, 0) 56%);
+  filter: blur(16px);
+  opacity: 0.42;
+  transform: rotate(-18deg) scale(1.02);
+  animation:
+    horizon-spin 4.2s linear infinite reverse,
+    shear-breathe 9.2s ease-in-out infinite;
+}
+
+.singularity-swirl {
+  border-radius: 52% 48% 41% 59% / 44% 58% 42% 56%;
+  background:
+    conic-gradient(
+      from 198deg,
+      rgba(255, 255, 255, 0) 0deg,
+      rgba(255, 255, 255, 0) 48deg,
+      rgba(255, 255, 255, 0.07) 88deg,
+      rgba(255, 255, 255, 0.016) 128deg,
+      rgba(255, 255, 255, 0) 176deg,
+      rgba(255, 255, 255, 0) 360deg
+    );
+  filter: blur(20px) contrast(128%);
+  mask-image: radial-gradient(circle at 54% 50%, transparent 0 20%, black 30%, black 62%, transparent 76%);
+  opacity: 0.52;
+  animation:
+    horizon-spin 4.8s linear infinite,
+    void-morph 8.6s ease-in-out infinite reverse;
+}
+
+.singularity-ring {
+  --ring-from-angle: 14deg;
+  --ring-mid-angle: 194deg;
+  --ring-from-y: 0.34;
+  --ring-mid-y: 0.18;
+  --ring-from-x: 1.24;
+  --ring-mid-x: 1.42;
+  border-radius: 48% 52% 60% 40% / 52% 40% 60% 48%;
+  background:
+    radial-gradient(ellipse at center, rgba(255, 255, 255, 0) 36%, rgba(255, 255, 255, 0.06) 48%, rgba(255, 255, 255, 0.015) 58%, rgba(255, 255, 255, 0) 72%);
+  filter: blur(16px);
+  animation: ring-precess 6.2s linear infinite;
+}
+
+.singularity-ring.is-secondary {
+  --ring-from-angle: -18deg;
+  --ring-mid-angle: 162deg;
+  --ring-from-y: 0.26;
+  --ring-mid-y: 0.12;
+  --ring-from-x: 1.36;
+  --ring-mid-x: 1.52;
+  opacity: 0.24;
+  filter: blur(22px);
+  animation-duration: 8.4s;
+  animation-direction: reverse;
+}
+
+.vortex-collapse {
+  border-radius: 41% 59% 44% 56% / 58% 38% 62% 42%;
+  background:
+    radial-gradient(circle at 44% 40%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.012) 10%, rgba(0, 0, 0, 0) 28%),
+    radial-gradient(circle at 56% 58%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 44%, rgba(8, 8, 8, 0.84) 58%, rgba(255, 255, 255, 0.02) 68%, rgba(0, 0, 0, 0) 84%);
+  box-shadow:
+    inset 0 0 54px rgba(0, 0, 0, 1);
+  filter: blur(8px);
+  animation:
+    void-morph 6.8s ease-in-out infinite,
+    collapse-pull 7.4s ease-in-out infinite;
+}
+
+.vortex-collapse.is-secondary {
+  opacity: 0.92;
+  filter: blur(6px);
+  animation-duration: 5.4s, 6.2s;
+  animation-direction: reverse, normal;
+}
+
+.vortex-core {
+  border-radius: 54% 46% 41% 59% / 39% 61% 39% 61%;
+  background:
+    radial-gradient(circle at 42% 36%, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.008) 8%, rgba(0, 0, 0, 0) 18%),
+    radial-gradient(circle at 58% 62%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 62%, rgba(255, 255, 255, 0.02) 66%, rgba(0, 0, 0, 0) 82%);
+  box-shadow:
+    inset 0 0 44px rgba(0, 0, 0, 1);
+  filter: blur(4px);
+  animation:
+    void-morph 4.8s ease-in-out infinite reverse,
+    collapse-pull 6.2s ease-in-out infinite reverse;
+}
+
+.infall-shard {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--size);
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0));
+  filter: blur(2px);
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateX(var(--distance));
+  transform-origin: center;
+  opacity: 0;
+  pointer-events: none;
+  animation: devour var(--duration) linear infinite;
+  animation-delay: var(--delay);
+}
+
+.infall-shard.is-fuchsia {
+  opacity: 0.75;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0));
+}
+
+.infall-shard.is-gold {
+  opacity: 0.55;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
+}
+
+@keyframes codefall {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes horizon-spin {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1.03);
+  }
+
+  to {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes ring-precess {
+  from {
+    transform: rotate(var(--ring-from-angle)) scaleY(var(--ring-from-y)) scaleX(var(--ring-from-x));
+  }
+
+  50% {
+    transform: rotate(var(--ring-mid-angle)) scaleY(var(--ring-mid-y)) scaleX(var(--ring-mid-x));
+  }
+
+  to {
+    transform: rotate(calc(var(--ring-from-angle) + 360deg)) scaleY(var(--ring-from-y)) scaleX(var(--ring-from-x));
+  }
+}
+
+@keyframes well-breathe {
+  0%,
+  100% {
+    transform: translateZ(0) scale(0.96);
+    opacity: 0.86;
+  }
+
+  50% {
+    transform: translateZ(0) scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes void-morph {
+  0%,
+  100% {
+    border-radius: 43% 57% 61% 39% / 42% 41% 59% 58%;
+  }
+
+  33% {
+    border-radius: 60% 40% 45% 55% / 54% 35% 65% 46%;
+  }
+
+  66% {
+    border-radius: 38% 62% 54% 46% / 36% 60% 40% 64%;
+  }
+}
+
+@keyframes spiral-sweep {
+  0%,
+  100% {
+    transform: rotate(var(--arm-from-angle)) scaleX(var(--arm-from-x)) scaleY(var(--arm-from-y));
+  }
+
+  50% {
+    transform: rotate(var(--arm-mid-angle)) scaleX(var(--arm-mid-x)) scaleY(var(--arm-mid-y));
+  }
+}
+
+@keyframes shear-breathe {
+  0%,
+  100% {
+    opacity: 0.42;
+    filter: blur(18px);
+  }
+
+  50% {
+    opacity: 0.62;
+    filter: blur(24px);
+  }
+}
+
+@keyframes collapse-pull {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.98);
+  }
+
+  40% {
+    transform: translate3d(-6px, 4px, 0) scale(1.06);
+  }
+
+  70% {
+    transform: translate3d(5px, -3px, 0) scale(0.94);
+  }
+}
+
+@keyframes devour {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(var(--distance)) scale(1);
+    opacity: 0;
+  }
+
+  14% {
+    opacity: 0.5;
+  }
+
+  74% {
+    opacity: 0.34;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(10px) scale(0.14);
+    opacity: 0;
+  }
+}
+
 @keyframes scanline {
   from {
     transform: translateY(-20%);

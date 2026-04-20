@@ -24,21 +24,26 @@ const profileFields: Array<keyof FateFormValues> = [
 const intentFields: Array<keyof FateFormValues> = [
   "occupation",
   "focusArea",
-  "question",
-  "recentIssue"
+  "lifeStage",
+  "personalityType",
+  "socialStyle",
+  "decisionStyle",
+  "stressResponse"
 ];
 
 const defaultValues: FateFormValues = {
   name: "",
-  alias: "",
   gender: "",
   birthDate: "",
   birthTime: "",
   relationshipStatus: "",
   occupation: "",
+  lifeStage: "",
   focusArea: "",
-  question: "",
-  recentIssue: ""
+  personalityType: "",
+  socialStyle: "",
+  decisionStyle: "",
+  stressResponse: ""
 };
 
 export function FateTerminalApp() {

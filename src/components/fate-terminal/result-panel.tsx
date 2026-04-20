@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import {
   Activity,
   BriefcaseBusiness,
+  Fingerprint,
   HeartHandshake,
   ShieldAlert,
   Sparkles,
@@ -18,6 +19,7 @@ type ResultPanelProps = {
 
 const sectionIcons = {
   overall: Activity,
+  persona: Fingerprint,
   love: HeartHandshake,
   career: BriefcaseBusiness,
   wealth: WalletCards,
@@ -58,6 +60,18 @@ export function ResultPanel({ reading, onRestart }: ResultPanelProps) {
                 <p className="text-xs uppercase tracking-[0.26em] text-emerald-100/50">Stability</p>
                 <p className="mt-3 text-2xl font-semibold text-white">{reading.stability}%</p>
               </div>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              {reading.profileMatrix.map((item) => (
+                <div
+                  key={item.label}
+                  className="rounded-[24px] border border-white/10 bg-white/[0.04] px-4 py-4"
+                >
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">{item.label}</p>
+                  <p className="mt-2 text-base font-medium text-white">{item.value}</p>
+                </div>
+              ))}
             </div>
 
             <div className="rounded-[28px] border border-fuchsia-300/12 bg-fuchsia-300/7 p-5">

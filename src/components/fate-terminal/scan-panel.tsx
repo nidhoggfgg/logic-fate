@@ -3,7 +3,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Cpu, Disc3, Orbit, ScanSearch } from "lucide-react";
-import type { FateFormValues } from "@/lib/reading-schema";
+import {
+  decisionStyleOptions,
+  focusOptions,
+  getOptionLabel,
+  lifeStageOptions,
+  relationshipOptions,
+  socialStyleOptions,
+  stressResponseOptions,
+  type FateFormValues
+} from "@/lib/reading-schema";
 
 type ScanPanelProps = {
   values: FateFormValues;
@@ -12,10 +21,12 @@ type ScanPanelProps = {
 const scanLogs = [
   "同步命理协议...",
   "定位时间线坐标...",
-  "检索情感链路残留...",
-  "扫描事业轨迹分岔...",
-  "重建财富波动索引...",
-  "提取近期风险窗口...",
+  "解析人格标签映射...",
+  "校验社交回路节律...",
+  "模拟决策路径分岔...",
+  "捕捉压力响应模式...",
+  "扫描事业与关系轨迹...",
+  "比对长期命势模型...",
   "生成最终命运判词..."
 ];
 
@@ -24,8 +35,26 @@ export function ScanPanel({ values }: ScanPanelProps) {
   const [progress, setProgress] = useState(8);
 
   const tags = useMemo(
-    () => [values.occupation, values.focusArea, values.relationshipStatus],
-    [values.focusArea, values.occupation, values.relationshipStatus]
+    () => [
+      values.occupation,
+      getOptionLabel(lifeStageOptions, values.lifeStage),
+      values.personalityType,
+      getOptionLabel(socialStyleOptions, values.socialStyle),
+      getOptionLabel(decisionStyleOptions, values.decisionStyle),
+      getOptionLabel(stressResponseOptions, values.stressResponse),
+      getOptionLabel(focusOptions, values.focusArea),
+      getOptionLabel(relationshipOptions, values.relationshipStatus)
+    ],
+    [
+      values.decisionStyle,
+      values.focusArea,
+      values.lifeStage,
+      values.occupation,
+      values.personalityType,
+      values.relationshipStatus,
+      values.socialStyle,
+      values.stressResponse
+    ]
   );
 
   useEffect(() => {
@@ -62,18 +91,18 @@ export function ScanPanel({ values }: ScanPanelProps) {
             <div>
               <h2 className="max-w-xl text-4xl font-semibold tracking-[-0.04em] text-white md:text-5xl">
                 命运主机正在读取
-                <span className="glow-text block text-cyan-300">{values.alias || values.name}</span>
+                <span className="glow-text block text-cyan-300">{values.name}</span>
                 的未来残响。
               </h2>
               <p className="mt-4 max-w-xl text-sm leading-7 text-slate-300">
-                系统已锁定你的出生时间、现实困扰与当前关注维度，接下来会生成一份带有近期窗口判断的命运报告。
+                系统已锁定你的出生时间、人格标签、社交方式、决策路径与压力反应，接下来会生成一份更偏向人物画像的命运报告。
               </p>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-3">
-              {tags.map((tag) => (
+            <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-4">
+              {tags.map((tag, index) => (
                 <div
-                  key={tag}
+                  key={`${tag}-${index}`}
                   className="rounded-2xl border border-cyan-300/12 bg-cyan-300/6 px-4 py-3 text-sm text-cyan-50/85"
                 >
                   {tag}

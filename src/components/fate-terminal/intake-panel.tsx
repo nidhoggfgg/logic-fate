@@ -8,9 +8,14 @@ import { Controller, useWatch } from "react-hook-form";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, CalendarDays, ChevronLeft, ChevronRight, Clock3 } from "lucide-react";
 import {
+  decisionStyleOptions,
   focusOptions,
+  getOptionLabel,
   genderOptions,
+  lifeStageOptions,
   relationshipOptions,
+  socialStyleOptions,
+  stressResponseOptions,
   type FateFormValues
 } from "@/lib/reading-schema";
 
@@ -630,10 +635,19 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
   const timeTriggerRef = useRef<HTMLButtonElement | null>(null);
 
   const synopsis = [
-    values.name ? `对象代号：${values.alias || values.name}` : "对象代号：未写入",
+    values.name ? `识别对象：${values.name}` : "识别对象：未写入",
     values.birthDate ? `出生坐标：${values.birthDate} ${values.birthTime || ""}` : "出生坐标：待校准",
-    values.occupation ? `身份标签：${values.occupation}` : "身份标签：待录入",
-    values.focusArea ? `本次焦点：${values.focusArea}` : "本次焦点：待锁定"
+    values.occupation ? `现实身份：${values.occupation}` : "现实身份：待录入",
+    values.lifeStage
+      ? `人生阶段：${getOptionLabel(lifeStageOptions, values.lifeStage)}`
+      : "人生阶段：待锁定",
+    values.personalityType ? `人格标签：${values.personalityType}` : "人格标签：待录入",
+    values.decisionStyle
+      ? `决策方式：${getOptionLabel(decisionStyleOptions, values.decisionStyle)}`
+      : "决策方式：待判断",
+    values.focusArea
+      ? `本次焦点：${getOptionLabel(focusOptions, values.focusArea)}`
+      : "本次焦点：待锁定"
   ];
 
   return (
@@ -654,12 +668,14 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
           <div>
             <p className="terminal-title text-[10px] text-cyan-100/50">Destiny Intake Sequence</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-white md:text-4xl">
-              {isProfile ? "写入你的身份坐标" : "锁定你此刻最在意的命运分支"}
+              {isProfile ? "写入你的身份坐标" : "补全你的命格画像"}
             </h2>
           </div>
           <div className="text-right">
             <p className="terminal-title text-[10px] text-slate-500">Phase</p>
-            <p className="mt-2 text-sm text-cyan-100">{isProfile ? "01 / Signal Registration" : "02 / Oracle Lock"}</p>
+            <p className="mt-2 text-sm text-cyan-100">
+              {isProfile ? "01 / Signal Registration" : "02 / Persona Mapping"}
+            </p>
           </div>
         </div>
 
@@ -669,24 +685,24 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
               <p className="terminal-title text-[10px] text-cyan-100/45">Ritual note</p>
               <p className="max-w-md text-2xl font-medium leading-10 tracking-[-0.03em] text-white">
                 {isProfile
-                  ? "系统正在建立你的命格索引。不是为了回答表面的问题，而是为了找到你命运里真正卡住的那个节点。"
-                  : "把问题说清楚，让终端知道该追踪哪一条时间线。你越诚实，返回的判词就越像命运本身。"}
+                  ? "系统正在建立你的命格索引。它不打算替你回答某一个问题，而是先确认你究竟是什么样的人。"
+                  : "这里不要求你长篇自述，而是通过人格标签和一组选择题，去描摹你处理关系、压力与选择时的真实轮廓。"}
               </p>
               <div className="space-y-3 border-l border-cyan-300/12 pl-4 text-sm leading-7 text-slate-400">
                 <p>这里的输入不需要很“标准”，但需要尽量真实。</p>
-                <p>你正在提交的不是表单，而是一份用于扫描未来残响的身份样本。</p>
+                <p>你正在回答的不是“最近想做什么”，而是“你本来就是怎样的人”。</p>
               </div>
             </div>
 
             <div className="space-y-4">
               <div className="flex items-center justify-between text-xs uppercase tracking-[0.26em] text-slate-500">
                 <span>Signal snapshot</span>
-                <span>{isProfile ? "42%" : "76%"}</span>
+                <span>{isProfile ? "44%" : "82%"}</span>
               </div>
               <div className="h-1.5 overflow-hidden rounded-full bg-white/6">
                 <motion.div
                   initial={{ width: 0 }}
-                  animate={{ width: isProfile ? "42%" : "76%" }}
+                  animate={{ width: isProfile ? "44%" : "82%" }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
                   className="h-full rounded-full bg-gradient-to-r from-cyan-300 via-emerald-300 to-fuchsia-400"
                 />
@@ -709,18 +725,6 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
                     render={({ field }) => (
                       <div className="terminal-input-line">
                         <input {...field} className="field-input" placeholder="例如：林深 / Alex" />
-                      </div>
-                    )}
-                  />
-                </FieldLine>
-
-                <FieldLine label="代号" hint="可选，结果页会优先显示这个名字" error={errors.alias?.message}>
-                  <Controller
-                    name="alias"
-                    control={control}
-                    render={({ field }) => (
-                      <div className="terminal-input-line">
-                        <input {...field} className="field-input" placeholder="例如：Ghostline" />
                       </div>
                     )}
                   />
@@ -750,7 +754,7 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
                   />
                 </FieldLine>
 
-                <FieldLine label="出生日期" hint="改为自定义选择器，避免原生控件兼容问题" error={errors.birthDate?.message}>
+                <FieldLine label="出生日期" hint="这是命盘的主坐标，尽量准确" error={errors.birthDate?.message}>
                   <Controller
                     name="birthDate"
                     control={control}
@@ -792,7 +796,7 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
                   />
                 </FieldLine>
 
-                <FieldLine label="出生时间" hint="用于提升命运窗口的精细度" error={errors.birthTime?.message}>
+                <FieldLine label="出生时间" hint="时间越接近真实，窗口判断越细" error={errors.birthTime?.message}>
                   <Controller
                     name="birthTime"
                     control={control}
@@ -837,19 +841,29 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
               </>
             ) : (
               <>
-                <FieldLine label="当前身份 / 职业" hint="例如：前端工程师、设计师、学生" error={errors.occupation?.message}>
+                <FieldLine label="当前身份 / 职业" hint="身份是命运落在现实里的样子" error={errors.occupation?.message}>
                   <Controller
                     name="occupation"
                     control={control}
                     render={({ field }) => (
                       <div className="terminal-input-line">
-                        <input {...field} className="field-input" placeholder="输入你的职业或身份" />
+                        <input {...field} className="field-input" placeholder="例如：前端工程师、设计师、学生" />
                       </div>
                     )}
                   />
                 </FieldLine>
 
-                <FieldLine label="最想关注的方向" hint="结果页会围绕这个维度重点生成" error={errors.focusArea?.message}>
+                <FieldLine label="你正处在哪个人生阶段" hint="阶段不同，命运反馈的节奏也不同" error={errors.lifeStage?.message}>
+                  <Controller
+                    name="lifeStage"
+                    control={control}
+                    render={({ field }) => (
+                      <OptionGroup options={lifeStageOptions} value={field.value} onChange={field.onChange} />
+                    )}
+                  />
+                </FieldLine>
+
+                <FieldLine label="最想重点看的命运维度" hint="结果页会围绕这个维度多给一些解释" error={errors.focusArea?.message}>
                   <Controller
                     name="focusArea"
                     control={control}
@@ -859,34 +873,48 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
                   />
                 </FieldLine>
 
-                <FieldLine label="你最想问的问题" hint="越具体，终端生成的判词越像真的" error={errors.question?.message}>
+                <FieldLine label="如果你做过人格测试，你的人格标签是什么" hint="例如：INTJ、INFP、ENFJ、5w4、高敏感型" error={errors.personalityType?.message}>
                   <Controller
-                    name="question"
+                    name="personalityType"
                     control={control}
                     render={({ field }) => (
-                      <div className="terminal-textarea">
-                        <textarea
-                          {...field}
-                          className="field-input min-h-36 resize-none"
-                          placeholder="例如：我现在是否该离开这份工作，去做新的选择？"
-                        />
+                      <div className="terminal-input-line">
+                        <input {...field} className="field-input" placeholder="输入你熟悉的人格标签或人格类型" />
                       </div>
                     )}
                   />
                 </FieldLine>
 
-                <FieldLine label="最近最困扰的一件事" hint="这能帮助系统判断你的现实阻力" error={errors.recentIssue?.message}>
+                <FieldLine label="你通常靠什么方式恢复能量" hint="这决定了你的人际与命势节律" error={errors.socialStyle?.message}>
                   <Controller
-                    name="recentIssue"
+                    name="socialStyle"
                     control={control}
                     render={({ field }) => (
-                      <div className="terminal-textarea">
-                        <textarea
-                          {...field}
-                          className="field-input min-h-36 resize-none"
-                          placeholder="例如：最近总觉得自己卡住了，状态起伏很大，也不知道该往哪使劲。"
-                        />
-                      </div>
+                      <OptionGroup options={socialStyleOptions} value={field.value} onChange={field.onChange} />
+                    )}
+                  />
+                </FieldLine>
+
+                <FieldLine label="遇到重要选择时，你更像哪一种人" hint="系统会据此判断你的主导判断回路" error={errors.decisionStyle?.message}>
+                  <Controller
+                    name="decisionStyle"
+                    control={control}
+                    render={({ field }) => (
+                      <OptionGroup options={decisionStyleOptions} value={field.value} onChange={field.onChange} />
+                    )}
+                  />
+                </FieldLine>
+
+                <FieldLine label="压力最高的时候，你通常先怎么反应" hint="这里会影响预警与情绪节律判断" error={errors.stressResponse?.message}>
+                  <Controller
+                    name="stressResponse"
+                    control={control}
+                    render={({ field }) => (
+                      <OptionGroup
+                        options={stressResponseOptions}
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
                     )}
                   />
                 </FieldLine>
