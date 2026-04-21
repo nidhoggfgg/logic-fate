@@ -44,13 +44,13 @@ type OptionGroupProps = {
 type DateAssemblerProps = {
   value: string;
   onChange: (value: string) => void;
-  error?: string;
+  onComplete?: () => void;
 };
 
 type TimeAssemblerProps = {
   value: string;
   onChange: (value: string) => void;
-  error?: string;
+  onComplete?: () => void;
 };
 
 type ScrollPickerColumnProps = {
@@ -482,7 +482,7 @@ function PickerPopover({
   );
 }
 
-function DateAssembler({ value, onChange }: DateAssemblerProps) {
+function DateAssembler({ value, onChange, onComplete }: DateAssemblerProps) {
   const selectedDate = useMemo(() => parseDateString(value), [value]);
   const [displayMonth, setDisplayMonth] = useState<Date>(selectedDate ?? new Date(1998, 5, 15));
 
@@ -561,6 +561,7 @@ function DateAssembler({ value, onChange }: DateAssemblerProps) {
             }
 
             onChange(formatIsoDate(date));
+            onComplete?.();
           }}
           showOutsideDays
           weekStartsOn={1}
@@ -591,12 +592,16 @@ function DateAssembler({ value, onChange }: DateAssemblerProps) {
   );
 }
 
-function TimeAssembler({ value, onChange }: TimeAssemblerProps) {
+function TimeAssembler({ value, onChange, onComplete }: TimeAssemblerProps) {
   const { hour, minute } = splitTime(value);
 
   function update(next: Partial<{ hour: string; minute: string }>) {
     const merged = { hour, minute, ...next };
     onChange(formatTimeParts(merged));
+
+    if (merged.hour && merged.minute) {
+      onComplete?.();
+    }
   }
 
   function handleHourChange(nextHour: string) {
@@ -617,7 +622,7 @@ function TimeAssembler({ value, onChange }: TimeAssemblerProps) {
   }
 
   return (
-    <div className="grid gap-3 md:grid-cols-2">
+    <div className="grid grid-cols-2 gap-3">
       <ScrollPickerColumn label="小时" options={hours} value={hour} onChange={handleHourChange} />
       <ScrollPickerColumn
         label="分钟"
@@ -660,13 +665,13 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.35, ease: "easeOut" }}
-      className="relative min-h-[100svh] overflow-hidden"
+      className="viewport-shell relative overflow-hidden"
     >
       <div className="fate-grid absolute inset-0 opacity-30" />
       <div className="absolute left-[4%] top-[10%] h-36 w-36 rounded-full bg-cyan-300/7 blur-3xl sm:left-[8%] sm:top-[14%] sm:h-60 sm:w-60" />
       <div className="absolute bottom-[6%] right-[4%] h-44 w-44 rounded-full bg-emerald-300/7 blur-3xl sm:bottom-[8%] sm:right-[10%] sm:h-72 sm:w-72" />
 
-      <div className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-7xl flex-col px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] sm:px-6 md:px-10 md:py-10">
+      <div className="viewport-shell relative z-10 mx-auto flex w-full max-w-7xl flex-col px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] sm:px-6 md:px-10 md:py-10">
         <div className="flex flex-wrap items-start justify-between gap-4 border-b border-cyan-300/10 pb-5">
           <div>
             <p className="terminal-title text-[10px] text-cyan-100/50">Destiny Intake Sequence</p>
@@ -790,7 +795,11 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
                               valueLabel={formatDateLabel(field.value)}
                               onClose={() => setActivePicker(null)}
                             >
-                              <DateAssembler value={field.value} onChange={field.onChange} />
+                              <DateAssembler
+                                value={field.value}
+                                onChange={field.onChange}
+                                onComplete={() => setActivePicker(null)}
+                              />
                             </PickerPopover>
                           ) : null}
                         </AnimatePresence>
@@ -833,7 +842,11 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
                               onClose={() => setActivePicker(null)}
                               maxWidth={448}
                             >
-                              <TimeAssembler value={field.value} onChange={field.onChange} />
+                              <TimeAssembler
+                                value={field.value}
+                                onChange={field.onChange}
+                                onComplete={() => setActivePicker(null)}
+                              />
                             </PickerPopover>
                           ) : null}
                         </AnimatePresence>

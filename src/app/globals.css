@@ -15,11 +15,18 @@
   --warning: #ffc857;
 }
 
+:root,
+html,
+body {
+  min-height: 100%;
+}
+
 * {
   box-sizing: border-box;
 }
 
 html {
+  background: #030508;
   min-height: 100%;
   scroll-behavior: smooth;
 }
@@ -29,6 +36,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   min-height: 100svh;
+  min-height: 100dvh;
   color: var(--text);
   color-scheme: dark;
   background:
@@ -216,6 +224,12 @@ textarea {
 .terminal-picker-list {
   scrollbar-width: thin;
   scrollbar-color: rgba(93, 242, 255, 0.28) transparent;
+}
+
+.viewport-shell {
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
 }
 
 .terminal-picker-list::-webkit-scrollbar {

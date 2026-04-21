@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Activity, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { AbyssVortex } from "@/components/fate-terminal/abyss-vortex";
 
 type LandingPanelProps = {
@@ -9,8 +9,8 @@ type LandingPanelProps = {
 };
 
 const marqueeRows = [
-  ["命盘", "Bazi", "塔罗", "Hexagram", "紫微", "Fortune", "卦象", "Divination", "流年"],
-  ["姻缘", "Oracle", "财运", "Tarot", "运势", "Natal Chart", "签文", "Astrology", "命格"]
+  ["命盘", "塔罗", "紫微", "卦象", "流年", "运势", "命格", "天机", "星轨"],
+  ["姻缘", "财运", "签文", "命数", "气运", "机缘", "回响", "福缘", "命途"]
 ] as const;
 
 function duplicated<T>(items: readonly T[]) {
@@ -25,18 +25,13 @@ export function LandingPanel({ onEnter }: LandingPanelProps) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 1.015 }}
       transition={{ duration: 0.55, ease: "easeOut" }}
-      className="relative min-h-[100svh] overflow-hidden bg-[#020407]"
+      className="viewport-shell relative overflow-hidden bg-[#020407]"
     >
       <AbyssVortex />
 
       <div className="pointer-events-none absolute inset-0">
         <div className="fate-grid absolute inset-0 opacity-25" />
         <div className="noise-mask absolute inset-0 opacity-12" />
-      </div>
-
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between px-4 pb-4 pt-[calc(1rem+env(safe-area-inset-top))] text-[9px] uppercase tracking-[0.32em] text-white/28 sm:px-6 sm:text-[10px] sm:tracking-[0.42em] md:px-10">
-        <span>Fate Singularity</span>
-        <span>Event Horizon Detected</span>
       </div>
 
       <div className="pointer-events-none absolute inset-x-0 top-[14%] z-10 flex flex-col items-center gap-2 sm:top-[18%] sm:gap-3">
@@ -77,8 +72,8 @@ export function LandingPanel({ onEnter }: LandingPanelProps) {
         ))}
       </div>
 
-      <div className="relative z-10 min-h-[100svh] px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] sm:px-6 md:px-10 md:py-8">
-        <div className="flex min-h-[100svh] flex-col justify-between">
+      <div className="viewport-shell relative z-10 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] sm:px-6 md:px-10 md:py-8">
+        <div className="viewport-shell flex flex-col justify-between">
           <div className="pt-20 sm:pt-16" />
 
           <div className="pointer-events-none absolute inset-x-0 top-1/2 z-0 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-cyan-300/18 to-transparent" />
@@ -105,27 +100,20 @@ export function LandingPanel({ onEnter }: LandingPanelProps) {
             <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(93,242,255,0.08),rgba(0,0,0,0.06)_28%,rgba(0,0,0,0)_62%)]" />
             <div className="absolute inset-[24%] rounded-full border border-white/10 bg-black/40 backdrop-blur-xl" />
             <div className="relative z-10 flex flex-col items-center">
-              <span className="text-[9px] uppercase tracking-[0.42em] text-white/44 transition duration-300 group-hover:text-cyan-100/80 sm:text-[10px] sm:tracking-[0.52em]">
-                Enter
+              <span className="text-[9px] tracking-[0.42em] text-white/44 transition duration-300 group-hover:text-cyan-100/80 sm:text-[10px] sm:tracking-[0.52em]">
+                进入入口
               </span>
               <span className="mt-2 text-lg font-medium tracking-[0.2em] text-white sm:mt-3 sm:text-xl sm:tracking-[0.28em]">
                 命运终端
               </span>
-              <span className="mt-2 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-cyan-200/78 sm:mt-3 sm:text-xs sm:tracking-[0.3em]">
-                Begin Scan
+              <span className="mt-2 inline-flex items-center gap-2 text-[11px] tracking-[0.22em] text-cyan-200/78 sm:mt-3 sm:text-xs sm:tracking-[0.3em]">
+                开始读取
                 <ArrowRight className="h-3.5 w-3.5 transition duration-300 group-hover:translate-x-1" />
               </span>
             </div>
           </motion.button>
 
-          <div className="grid gap-6 pb-2 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-end">
-            <div className="self-end">
-              <div className="inline-flex items-center gap-3 rounded-full border border-white/8 bg-black/24 px-3 py-2 text-[9px] uppercase tracking-[0.24em] text-white/38 backdrop-blur-md sm:px-4 sm:text-[10px] sm:tracking-[0.38em]">
-                <Activity className="h-3.5 w-3.5 text-cyan-300/70" />
-                Observing Anomaly // Event Horizon Detected
-              </div>
-            </div>
-          </div>
+          <div className="pb-2" />
         </div>
       </div>
     </motion.section>

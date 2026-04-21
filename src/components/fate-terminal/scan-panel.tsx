@@ -79,9 +79,9 @@ export function ScanPanel({ values }: ScanPanelProps) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -24 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] sm:px-6 md:px-8 md:py-8"
+      className="viewport-shell flex items-center px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] sm:px-6 md:px-8 md:py-8"
     >
-      <div className="panel-frame noise-mask mx-auto max-w-7xl rounded-[28px] p-5 sm:rounded-[32px] sm:p-6 md:p-10">
+      <div className="panel-frame noise-mask mx-auto w-full max-w-7xl rounded-[28px] p-5 sm:rounded-[32px] sm:p-6 md:p-10">
         <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
           <div className="space-y-6">
             <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.36em] text-cyan-100/65">

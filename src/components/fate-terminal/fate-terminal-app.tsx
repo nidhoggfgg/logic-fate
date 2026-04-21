@@ -107,8 +107,8 @@ export function FateTerminalApp() {
   }
 
   return (
-    <main className="relative min-h-[100svh] overflow-hidden">
-      <div className="mx-auto flex min-h-[100svh] w-full flex-col justify-center">
+    <main className="viewport-shell relative overflow-hidden">
+      <div className="viewport-shell mx-auto flex w-full flex-col">
         <AnimatePresence mode="wait">
           {step === "landing" ? <LandingPanel onEnter={() => setStep("profile")} /> : null}
 
@@ -137,8 +137,8 @@ export function FateTerminalApp() {
           {step === "scan" && submittedValues ? <ScanPanel values={submittedValues} /> : null}
 
           {step === "result" && reading ? (
-            <div className="px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] sm:px-6 md:px-8 md:py-8">
-              <div className="mx-auto max-w-7xl">
+            <div className="viewport-shell px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] sm:px-6 md:px-8 md:py-8">
+              <div className="mx-auto w-full max-w-7xl">
                 <ResultPanel reading={reading} onRestart={handleRestart} />
               </div>
             </div>

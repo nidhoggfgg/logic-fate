@@ -28,6 +28,7 @@ const sectionIcons = {
 
 export function ResultPanel({ reading, onRestart }: ResultPanelProps) {
   const [identityFact, personaFact, ...detailFacts] = reading.profileMatrix;
+  const leadFacts = [identityFact, personaFact].filter(Boolean);
 
   return (
     <motion.section
@@ -77,48 +78,91 @@ export function ResultPanel({ reading, onRestart }: ResultPanelProps) {
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="terminal-title text-[10px] text-cyan-100/45">Profile Matrix</p>
-                    <p className="mt-2 text-sm text-slate-400">将短标签信息压缩成更紧凑的命格档案。</p>
+                    <p className="mt-2 text-sm text-slate-400">将身份、人格与当前窗口压缩成更适合移动端阅读的命格档案。</p>
                   </div>
                   <div className="rounded-full border border-cyan-300/14 bg-cyan-300/8 px-3 py-1 text-xs text-cyan-100/75">
                     {reading.timelineWindow}
                   </div>
                 </div>
 
-                <div className="grid gap-3 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {[identityFact, personaFact].filter(Boolean).map((item) => (
-                      <div
-                        key={item.label}
-                        className="rounded-[22px] border border-cyan-300/12 bg-cyan-300/7 px-4 py-4"
-                      >
-                        <p className="text-[11px] uppercase tracking-[0.24em] text-cyan-100/48">{item.label}</p>
-                        <p className="mt-2 text-base font-medium text-white">{item.value}</p>
+                <div className="grid gap-4 lg:grid-cols-[minmax(0,1.04fr)_minmax(0,0.96fr)]">
+                  <div className="space-y-4">
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {leadFacts.map((item) => (
+                        <div
+                          key={item.label}
+                          className="rounded-[22px] border border-cyan-300/12 bg-cyan-300/7 px-4 py-4"
+                        >
+                          <p className="text-[11px] uppercase tracking-[0.24em] text-cyan-100/48">{item.label}</p>
+                          <p className="mt-2 text-base font-medium leading-7 text-white">{item.value}</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="rounded-[22px] border border-white/8 bg-black/18 p-4 sm:p-5">
+                      <div className="flex items-center justify-between gap-4">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-slate-500">命格档案</p>
+                        <p className="text-xs text-slate-500">高密度摘要</p>
                       </div>
-                    ))}
+
+                      <div className="mt-4 divide-y divide-cyan-300/10">
+                        {detailFacts.map((item) => (
+                          <div
+                            key={item.label}
+                            className="grid gap-1 py-3 sm:grid-cols-[104px_minmax(0,1fr)] sm:gap-4"
+                          >
+                            <p className="text-[11px] uppercase tracking-[0.22em] text-slate-500">
+                              {item.label}
+                            </p>
+                            <p className="text-sm font-medium leading-6 text-slate-100">{item.value}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    {detailFacts.map((item) => (
+                  <div className="space-y-3">
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                       <div
-                        key={item.label}
-                        className="rounded-[20px] border border-white/8 bg-black/18 px-4 py-3"
+                        className="rounded-[22px] border border-emerald-300/12 bg-emerald-300/8 px-4 py-4"
                       >
-                        <p className="text-[11px] uppercase tracking-[0.22em] text-slate-500">{item.label}</p>
-                        <p className="mt-1.5 text-sm font-medium leading-6 text-slate-100">{item.value}</p>
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-emerald-100/50">观察窗口</p>
+                        <p className="mt-2 text-lg font-semibold text-white">{reading.timelineWindow}</p>
+                        <p className="mt-1 text-sm text-emerald-50/78">近期波动更容易在这个时间段显形。</p>
                       </div>
-                    ))}
-                  </div>
-                </div>
 
-                <div className="flex flex-wrap gap-2">
-                  {reading.resonanceTags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-cyan-300/20 bg-cyan-300/8 px-3 py-1 text-xs text-cyan-50/85"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                      <div
+                        className="rounded-[22px] border border-cyan-300/12 bg-cyan-300/8 px-4 py-4"
+                      >
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-cyan-100/48">波形状态</p>
+                        <p className="mt-2 text-lg font-semibold text-white">
+                          {reading.waveState} · {reading.stability}%
+                        </p>
+                        <p className="mt-1 text-sm text-cyan-50/78">当前节律趋于稳定，适合做连续判断。</p>
+                      </div>
+                    </div>
+
+                    <div className="rounded-[22px] border border-fuchsia-300/12 bg-fuchsia-300/7 p-4 sm:p-5">
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-fuchsia-100/55">共振信号</p>
+                        <p className="text-xs text-fuchsia-100/45">Top 3</p>
+                      </div>
+
+                      <div className="mt-4 space-y-2.5">
+                        {reading.resonanceTags.map((tag, index) => (
+                          <div
+                            key={tag}
+                            className="flex items-center gap-3 rounded-2xl border border-white/8 bg-black/15 px-3 py-3"
+                          >
+                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-fuchsia-200/18 bg-fuchsia-200/10 text-xs font-medium text-fuchsia-50">
+                              0{index + 1}
+                            </span>
+                            <p className="text-sm leading-6 text-white">{tag}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
