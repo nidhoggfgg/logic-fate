@@ -204,7 +204,7 @@ function formatTimeLabel(value: string) {
 
 function FieldLine({ label, hint, error, children }: FieldLineProps) {
   return (
-    <div className="space-y-4 border-b border-cyan-300/10 pb-6">
+    <div className="space-y-4 border-b border-cyan-300/10 pb-5 sm:pb-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-sm font-medium uppercase tracking-[0.24em] text-cyan-100/75">{label}</p>
@@ -228,7 +228,7 @@ function OptionGroup({ options, value, onChange }: OptionGroupProps) {
             key={option.value}
             type="button"
             onClick={() => onChange(option.value)}
-            className={`rounded-full border px-4 py-2 text-sm transition ${
+            className={`rounded-full border px-4 py-2 text-xs transition sm:text-sm ${
               active
                 ? "border-cyan-300/60 bg-cyan-300/16 text-cyan-50 shadow-[0_0_22px_rgba(93,242,255,0.18)]"
                 : "border-white/10 bg-white/[0.03] text-slate-300 hover:border-cyan-300/25 hover:text-cyan-50"
@@ -387,19 +387,20 @@ function PickerPopover({
       const anchorRect = anchor.getBoundingClientRect();
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
-      const popoverWidth = Math.min(
-        Math.max(anchorRect.width, 320),
-        maxWidth,
-        viewportWidth - viewportPadding * 2
-      );
+      const isCompactViewport = viewportWidth < 640;
+      const popoverWidth = isCompactViewport
+        ? viewportWidth - viewportPadding * 2
+        : Math.min(Math.max(anchorRect.width, 320), maxWidth, viewportWidth - viewportPadding * 2);
       const estimatedHeight = popover.offsetHeight || 420;
       const availableBelow = viewportHeight - anchorRect.bottom - gap - viewportPadding;
       const availableAbove = anchorRect.top - gap - viewportPadding;
       const shouldPlaceAbove =
-        availableBelow < Math.min(estimatedHeight, 420) && availableAbove > availableBelow;
+        !isCompactViewport &&
+        availableBelow < Math.min(estimatedHeight, 420) &&
+        availableAbove > availableBelow;
       const nextSide = shouldPlaceAbove ? "top" : "bottom";
       const maxHeight = Math.max(
-        280,
+        isCompactViewport ? 320 : 280,
         Math.min(
           viewportHeight - viewportPadding * 2,
           nextSide === "bottom" ? availableBelow : availableAbove
@@ -413,8 +414,9 @@ function PickerPopover({
 
       left = Math.max(viewportPadding, left);
 
-      const top =
-        nextSide === "bottom"
+      const top = isCompactViewport
+        ? Math.max(viewportPadding, viewportHeight - viewportPadding - maxHeight)
+        : nextSide === "bottom"
           ? Math.min(anchorRect.bottom + gap, viewportHeight - viewportPadding - maxHeight)
           : Math.max(viewportPadding, anchorRect.top - gap - maxHeight);
 
@@ -458,16 +460,16 @@ function PickerPopover({
         transition={{ duration: 0.22, ease: "easeOut" }}
         data-side={side}
         style={style}
-        className="picker-popover fixed z-50 flex flex-col rounded-[28px] border border-cyan-300/16 bg-[rgba(5,10,18,0.96)] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.48)]"
+        className="picker-popover fixed z-50 flex flex-col rounded-[24px] border border-cyan-300/16 bg-[rgba(5,10,18,0.96)] p-4 shadow-[0_24px_80px_rgba(0,0,0,0.48)] sm:rounded-[28px] sm:p-5"
       >
         <div className="shrink-0 border-b border-cyan-300/10 pb-4">
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
             <div>
               <p className="terminal-title text-[10px] text-cyan-100/45">Fate Picker</p>
-              <h3 className="mt-3 text-xl font-semibold tracking-[-0.04em] text-white">{title}</h3>
+              <h3 className="mt-3 text-lg font-semibold tracking-[-0.04em] text-white sm:text-xl">{title}</h3>
               <p className="mt-2 text-sm leading-6 text-slate-400">{subtitle}</p>
             </div>
-            <div className="rounded-full border border-cyan-300/10 bg-cyan-300/[0.05] px-3 py-1 text-xs text-cyan-100/70">
+            <div className="w-fit rounded-full border border-cyan-300/10 bg-cyan-300/[0.05] px-3 py-1 text-xs text-cyan-100/70">
               {valueLabel}
             </div>
           </div>
@@ -500,7 +502,7 @@ function DateAssembler({ value, onChange }: DateAssemblerProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="grid flex-1 gap-3 sm:grid-cols-2">
           <CompactDropdown
             label="年份"
@@ -521,7 +523,7 @@ function DateAssembler({ value, onChange }: DateAssemblerProps) {
           />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-end gap-2">
           <button
             type="button"
             onClick={() =>
@@ -547,7 +549,7 @@ function DateAssembler({ value, onChange }: DateAssemblerProps) {
         </div>
       </div>
 
-      <div className="rounded-[24px] border border-cyan-300/12 bg-slate-950/72 p-3">
+      <div className="rounded-[20px] border border-cyan-300/12 bg-slate-950/72 p-2 sm:rounded-[24px] sm:p-3">
         <DayPicker
           mode="single"
           month={displayMonth}
@@ -571,12 +573,13 @@ function DateAssembler({ value, onChange }: DateAssemblerProps) {
             month: "space-y-3",
             month_caption: "hidden",
             nav: "hidden",
-            weekdays: "grid grid-cols-7 gap-2",
-            weekday: "flex h-9 items-center justify-center text-xs uppercase tracking-[0.2em] text-slate-500",
-            week: "mt-2 grid grid-cols-7 gap-2",
+            weekdays: "grid grid-cols-7 gap-1.5 sm:gap-2",
+            weekday:
+              "flex h-8 items-center justify-center text-[11px] uppercase tracking-[0.16em] text-slate-500 sm:h-9 sm:text-xs sm:tracking-[0.2em]",
+            week: "mt-1.5 grid grid-cols-7 gap-1.5 sm:mt-2 sm:gap-2",
             day: "flex justify-center",
             day_button:
-              "flex h-11 w-11 items-center justify-center rounded-2xl border border-transparent text-sm text-slate-200 transition hover:border-cyan-300/20 hover:bg-cyan-300/10",
+              "flex h-9 w-9 items-center justify-center rounded-xl border border-transparent text-sm text-slate-200 transition hover:border-cyan-300/20 hover:bg-cyan-300/10 sm:h-11 sm:w-11 sm:rounded-2xl",
             selected:
               "[&_button]:border-cyan-300/45 [&_button]:bg-cyan-300/18 [&_button]:text-cyan-50 [&_button]:shadow-[0_0_22px_rgba(93,242,255,0.16)]",
             today: "[&_button]:border-emerald-300/32 [&_button]:text-emerald-200",
@@ -657,21 +660,21 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.35, ease: "easeOut" }}
-      className="relative min-h-screen overflow-hidden"
+      className="relative min-h-[100svh] overflow-hidden"
     >
       <div className="fate-grid absolute inset-0 opacity-30" />
-      <div className="absolute left-[8%] top-[14%] h-60 w-60 rounded-full bg-cyan-300/7 blur-3xl" />
-      <div className="absolute bottom-[8%] right-[10%] h-72 w-72 rounded-full bg-emerald-300/7 blur-3xl" />
+      <div className="absolute left-[4%] top-[10%] h-36 w-36 rounded-full bg-cyan-300/7 blur-3xl sm:left-[8%] sm:top-[14%] sm:h-60 sm:w-60" />
+      <div className="absolute bottom-[6%] right-[4%] h-44 w-44 rounded-full bg-emerald-300/7 blur-3xl sm:bottom-[8%] sm:right-[10%] sm:h-72 sm:w-72" />
 
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col px-6 py-8 md:px-10 md:py-10">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-cyan-300/10 pb-5">
+      <div className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-7xl flex-col px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] sm:px-6 md:px-10 md:py-10">
+        <div className="flex flex-wrap items-start justify-between gap-4 border-b border-cyan-300/10 pb-5">
           <div>
             <p className="terminal-title text-[10px] text-cyan-100/50">Destiny Intake Sequence</p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-white md:text-4xl">
+            <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-white sm:text-3xl md:text-4xl">
               {isProfile ? "写入你的身份坐标" : "补全你的命格画像"}
             </h2>
           </div>
-          <div className="text-right">
+          <div className="sm:text-right">
             <p className="terminal-title text-[10px] text-slate-500">Phase</p>
             <p className="mt-2 text-sm text-cyan-100">
               {isProfile ? "01 / Signal Registration" : "02 / Persona Mapping"}
@@ -679,11 +682,11 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
           </div>
         </div>
 
-        <div className="grid flex-1 gap-10 py-8 xl:grid-cols-[0.42fr_0.58fr]">
-          <aside className="flex flex-col justify-between gap-8">
+        <div className="grid flex-1 gap-8 py-6 lg:gap-10 lg:py-8 xl:grid-cols-[0.42fr_0.58fr]">
+          <aside className="order-2 flex flex-col justify-between gap-8 xl:order-1">
             <div className="space-y-5">
               <p className="terminal-title text-[10px] text-cyan-100/45">Ritual note</p>
-              <p className="max-w-md text-2xl font-medium leading-10 tracking-[-0.03em] text-white">
+              <p className="max-w-md text-xl font-medium leading-8 tracking-[-0.03em] text-white sm:text-2xl sm:leading-10">
                 {isProfile
                   ? "系统正在建立你的命格索引。它不打算替你回答某一个问题，而是先确认你究竟是什么样的人。"
                   : "这里不要求你长篇自述，而是通过人格标签和一组选择题，去描摹你处理关系、压力与选择时的真实轮廓。"}
@@ -707,7 +710,7 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
                   className="h-full rounded-full bg-gradient-to-r from-cyan-300 via-emerald-300 to-fuchsia-400"
                 />
               </div>
-              <div className="space-y-3 border border-cyan-300/10 bg-black/20 p-5 font-mono text-[11px] leading-6 text-emerald-200/85">
+              <div className="space-y-3 border border-cyan-300/10 bg-black/20 p-4 font-mono text-[11px] leading-6 text-emerald-200/85 sm:p-5">
                 {synopsis.map((line) => (
                   <p key={line}>&gt; {line}</p>
                 ))}
@@ -715,7 +718,7 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
             </div>
           </aside>
 
-          <div className="space-y-6">
+          <div className="order-1 space-y-6 xl:order-2">
             {isProfile ? (
               <>
                 <FieldLine label="名字" hint="输入你希望被读取的身份名" error={errors.name?.message}>
@@ -764,9 +767,9 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
                           ref={dateTriggerRef}
                           type="button"
                           onClick={() => setActivePicker("date")}
-                          className="picker-trigger group flex w-full items-center justify-between rounded-[24px] border border-cyan-300/14 bg-slate-950/70 px-5 py-4 text-left transition hover:border-cyan-300/32 hover:bg-cyan-300/[0.06]"
+                          className="picker-trigger group flex w-full flex-col items-start gap-4 rounded-[24px] border border-cyan-300/14 bg-slate-950/70 px-4 py-4 text-left transition hover:border-cyan-300/32 hover:bg-cyan-300/[0.06] sm:flex-row sm:items-center sm:justify-between sm:px-5"
                         >
-                          <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-3 sm:gap-4">
                             <div className="rounded-2xl border border-cyan-300/14 bg-cyan-300/[0.06] p-3 text-cyan-200">
                               <CalendarDays className="h-5 w-5" />
                             </div>
@@ -806,9 +809,9 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
                           ref={timeTriggerRef}
                           type="button"
                           onClick={() => setActivePicker("time")}
-                          className="picker-trigger group flex w-full items-center justify-between rounded-[24px] border border-cyan-300/14 bg-slate-950/70 px-5 py-4 text-left transition hover:border-cyan-300/32 hover:bg-cyan-300/[0.06]"
+                          className="picker-trigger group flex w-full flex-col items-start gap-4 rounded-[24px] border border-cyan-300/14 bg-slate-950/70 px-4 py-4 text-left transition hover:border-cyan-300/32 hover:bg-cyan-300/[0.06] sm:flex-row sm:items-center sm:justify-between sm:px-5"
                         >
-                          <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-3 sm:gap-4">
                             <div className="rounded-2xl border border-cyan-300/14 bg-cyan-300/[0.06] p-3 text-cyan-200">
                               <Clock3 className="h-5 w-5" />
                             </div>
@@ -921,11 +924,11 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
               </>
             )}
 
-            <div className="flex flex-wrap items-center justify-between gap-4 pt-4">
+            <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
               <button
                 type="button"
                 onClick={onBack}
-                className="rounded-full border border-white/12 bg-white/[0.03] px-5 py-3 text-sm text-slate-200 transition hover:border-white/20 hover:bg-white/[0.05]"
+                className="w-full rounded-full border border-white/12 bg-white/[0.03] px-5 py-3 text-sm text-slate-200 transition hover:border-white/20 hover:bg-white/[0.05] sm:w-auto"
               >
                 <span className="inline-flex items-center gap-2">
                   <ArrowLeft className="h-4 w-4" />
@@ -936,7 +939,7 @@ export function IntakePanel({ step, control, errors, onBack, onNext, onSubmit }:
               <button
                 type="button"
                 onClick={isProfile ? onNext : onSubmit}
-                className="neon-button rounded-full border border-cyan-300/35 bg-cyan-300/12 px-6 py-3 text-sm text-cyan-50 transition hover:border-cyan-200/60 hover:bg-cyan-300/18"
+                className="neon-button w-full rounded-full border border-cyan-300/35 bg-cyan-300/12 px-6 py-3 text-sm text-cyan-50 transition hover:border-cyan-200/60 hover:bg-cyan-300/18 sm:w-auto"
               >
                 <span className="inline-flex items-center gap-2">
                   {isProfile ? "继续校准" : "开始命运扫描"}

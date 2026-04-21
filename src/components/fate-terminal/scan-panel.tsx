@@ -79,9 +79,9 @@ export function ScanPanel({ values }: ScanPanelProps) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -24 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="px-4 py-6 md:px-8 md:py-8"
+      className="px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] sm:px-6 md:px-8 md:py-8"
     >
-      <div className="panel-frame noise-mask mx-auto max-w-7xl rounded-[32px] p-6 md:p-10">
+      <div className="panel-frame noise-mask mx-auto max-w-7xl rounded-[28px] p-5 sm:rounded-[32px] sm:p-6 md:p-10">
         <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
           <div className="space-y-6">
             <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.36em] text-cyan-100/65">
@@ -89,7 +89,7 @@ export function ScanPanel({ values }: ScanPanelProps) {
               Deep Scan Protocol
             </div>
             <div>
-              <h2 className="max-w-xl text-4xl font-semibold tracking-[-0.04em] text-white md:text-5xl">
+              <h2 className="max-w-xl text-3xl font-semibold tracking-[-0.04em] text-white sm:text-4xl md:text-5xl">
                 命运主机正在读取
                 <span className="glow-text block text-cyan-300">{values.name}</span>
                 的未来残响。
@@ -99,11 +99,11 @@ export function ScanPanel({ values }: ScanPanelProps) {
               </p>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-4">
+            <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4">
               {tags.map((tag, index) => (
                 <div
                   key={`${tag}-${index}`}
-                  className="rounded-2xl border border-cyan-300/12 bg-cyan-300/6 px-4 py-3 text-sm text-cyan-50/85"
+                  className="rounded-2xl border border-cyan-300/12 bg-cyan-300/6 px-3 py-3 text-sm text-cyan-50/85 sm:px-4"
                 >
                   {tag}
                 </div>
@@ -125,18 +125,18 @@ export function ScanPanel({ values }: ScanPanelProps) {
           </div>
 
           <div className="grid gap-4 lg:grid-cols-[0.72fr_1.28fr]">
-            <div className="panel-frame flex min-h-[280px] flex-col items-center justify-center rounded-[28px]">
+            <div className="panel-frame flex min-h-[220px] flex-col items-center justify-center rounded-[24px] sm:min-h-[280px] sm:rounded-[28px]">
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                className="flex h-44 w-44 items-center justify-center rounded-full border border-cyan-300/30"
+                className="flex h-32 w-32 items-center justify-center rounded-full border border-cyan-300/30 sm:h-44 sm:w-44"
               >
                 <motion.div
                   animate={{ rotate: -360, scale: [1, 1.08, 1] }}
                   transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                  className="flex h-28 w-28 items-center justify-center rounded-full border border-emerald-300/30 bg-emerald-300/8"
+                  className="flex h-20 w-20 items-center justify-center rounded-full border border-emerald-300/30 bg-emerald-300/8 sm:h-28 sm:w-28"
                 >
-                  <Orbit className="h-9 w-9 text-cyan-200" />
+                  <Orbit className="h-7 w-7 text-cyan-200 sm:h-9 sm:w-9" />
                 </motion.div>
               </motion.div>
               <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-cyan-100/55">
@@ -145,7 +145,7 @@ export function ScanPanel({ values }: ScanPanelProps) {
               </div>
             </div>
 
-            <div className="rounded-[28px] border border-cyan-300/12 bg-slate-950/62 p-5">
+            <div className="rounded-[24px] border border-cyan-300/12 bg-slate-950/62 p-4 sm:rounded-[28px] sm:p-5">
               <div className="flex items-center gap-3 text-sm text-cyan-100">
                 <ScanSearch className="h-4 w-4" />
                 Scan log
